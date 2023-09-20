@@ -1,0 +1,8 @@
+---
+# defaults file for ansible-role-nginx-proxy-manager
+proxy_manager_version: 2.10.4
+nginx_http_port: 80
+nginx_https_port: 443
+nxinx_admin_port: 81
+
+volume_storage_mount: /opt/nginx-proxy-mgr

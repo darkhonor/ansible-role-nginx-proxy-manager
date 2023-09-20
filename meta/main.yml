@@ -1,0 +1,20 @@
+galaxy_info:
+  author: Alex Ackerman
+  description: Setup and Run the NGINX Proxy Manager docker container on a host
+  role_name: nginx_proxy_manager
+
+  # issue_tracker_url: http://example.com/issue/tracker
+
+  license: MIT
+
+  min_ansible_version: '2.12'
+
+  platforms:
+  - name: Debian
+    versions:
+    - 'bullseye'  # Raspbian OS current
+    - 'buster'    # Raspbian OS legacy
+
+  galaxy_tags: []
+
+dependencies: []

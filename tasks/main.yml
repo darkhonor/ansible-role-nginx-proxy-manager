@@ -1,0 +1,32 @@
+---
+# tasks file for ansible-role-nginx-proxy-manager
+- name: Ensure pre-requisites are installed
+  ansible.builtin.apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - software-properties-common
+    state: present
+
+- name: Create Volume Mount Directories
+  ansible.builtin.file:
+    path: '{{ item }}'
+    mode: '0755'
+    state: directory
+  with_items:
+    - "{{ volume_storage_mount }}"
+    - "{{ volume_storage_mount }}/data"
+    - "{{ volume_storage_mount }}/letsencrypt"
+
+- name: Start NGINX Proxy Manager Container
+  community.docker.docker_container:
+    name: nginx_proxy
+    image: jc21/nginx-proxy-manager:'{{ proxy_manager_version }}'
+    published_ports:
+      - "{{ nginx_http_port }}:80"
+      - "{{ nginx_https_port }}:443"
+      - "{{ nxinx_admin_port }}:81"
+    volumes:
+      - "{{ volume_storage_mount }}/data:/data"
+      - "{{ volume_storage_mount }}/letsencrypt:/etc/letsencrypt"
+    restart_policy: "unless-stopped"
