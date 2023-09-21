@@ -21,7 +21,7 @@
 - name: Start NGINX Proxy Manager Container
   community.docker.docker_container:
     name: nginx_proxy
-    image: jc21/nginx-proxy-manager:'{{ proxy_manager_version }}'
+    image: "jc21/nginx-proxy-manager:{{ proxy_manager_version }}"
     published_ports:
       - "{{ nginx_http_port }}:80"
       - "{{ nginx_https_port }}:443"
@@ -30,3 +30,7 @@
       - "{{ volume_storage_mount }}/data:/data"
       - "{{ volume_storage_mount }}/letsencrypt:/etc/letsencrypt"
     restart_policy: "unless-stopped"
+    healthcheck:
+      test: ["CMD", "/bin/check-health"]
+      interval: 10s
+      timeout: 3s
