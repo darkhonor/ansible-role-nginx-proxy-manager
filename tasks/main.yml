@@ -18,6 +18,47 @@
     - "{{ volume_storage_mount }}/data"
     - "{{ volume_storage_mount }}/letsencrypt"
 
+- name: Ensure UFW is installed
+  ansible.builtin.apt:
+    name:
+      - ufw
+    state: present
+  when:
+    - enable_ufw
+
+- name: Open HTTP Port on the Firewall
+  community.general.ufw:
+    rule: allow
+    port: '{{ nginx_http_port }}'
+    proto: tcp
+    src: '{{ item }}'
+    comment: Allow HTTP from Private Networks
+  loop: '{{ valid_sources }}'
+  when:
+    - enable_ufw
+
+- name: Open HTTPS Port on the Firewall
+  community.general.ufw:
+    rule: allow
+    port: '{{ nginx_https_port }}'
+    proto: tcp
+    src: '{{ item }}'
+    comment: Allow HTTPS from Private Networks
+  loop: '{{ valid_sources }}'
+  when:
+    - enable_ufw
+
+- name: Open Admin Port on the Firewall
+  community.general.ufw:
+    rule: allow
+    port: '{{ nxinx_admin_port }}'
+    proto: tcp
+    src: '{{ item }}'
+    comment: Allow Admin UI from Private Networks
+  loop: '{{ valid_sources }}'
+  when:
+    - enable_ufw
+
 - name: Start NGINX Proxy Manager Container
   community.docker.docker_container:
     name: nginx_proxy

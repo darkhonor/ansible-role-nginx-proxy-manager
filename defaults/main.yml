@@ -6,3 +6,12 @@ nginx_https_port: 443
 nxinx_admin_port: 81
 
 volume_storage_mount: /opt/nginx-proxy-mgr
+
+###
+# Firewall Settings
+###
+enable_ufw: true
+valid_sources:
+  - 10.0.0.0/8
+  - 172.16.0.0/12
+  - 192.168.0.0/16
